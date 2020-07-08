@@ -4,11 +4,12 @@
       <span><label>Username:</label> {{username}}</span>
       <span><label>Token Type:</label> {{tokenType}}</span>
       <span><label>Expiration:</label> {{expirationTime}} ms</span>
+      <span><label>Admin: {{userInfoClass["admin-info"]}}</label></span>
       <span><a href="#" @click="loggedIn = false">[Logout]</a></span>
     </div>
     <img alt="Micronaut logo" src="./assets/logo.png" style="max-width: 480px;">
     <LoginForm @login="login" v-if="!loggedIn"/>
-    <ProductList v-else :username="username" />
+    <ProductList v-else :username="username" :roles="roles" />
 
   </div>
 </template>
@@ -27,16 +28,17 @@ export default {
     return {
       loggedIn: false,
       username: null,
+      roles: null,
       tokenType: null,
       expirationTime: null,
     }
   },
   methods: {
     login(response) {
-      if (response.access_token) {
+      if (response && response.access_token) {
         localStorage.setItem("access_token", response.access_token);
         localStorage.setItem("refresh_token", response.refresh_token);
-
+        this.roles = response.roles;
         this.username = response.username;
         this.tokenType = response.token_type;
         this.expirationTime = response.expires_in;
@@ -49,7 +51,7 @@ export default {
     userInfoClass() {
       return {
         'user-info': true,
-        'admin-info': this.username === 'Admin'
+        'admin-info': this.roles.includes('ROLE_ADMIN')
       }
     }
   }

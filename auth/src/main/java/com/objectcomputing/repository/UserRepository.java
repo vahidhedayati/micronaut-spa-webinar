@@ -22,32 +22,30 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
  public static String USERS_BY_EMAIL_CACHE = "usersByEmail";
 
- public abstract Optional<User> findOneByActivationKey(String activationKey);
+ Optional<User> findOneByActivationKey(String activationKey);
 
- public abstract List<User> findAllByActivatedFalseAndCreatedDateBefore(Instant dateTime);
+ List<User> findAllByActivatedFalseAndCreatedDateBefore(Instant dateTime);
 
- public abstract Optional<User> findOneByResetKey(String resetKey);
+ Optional<User> findOneByResetKey(String resetKey);
 
- public abstract Optional<User> findOneByEmailIgnoreCase(String email);
-
- Optional<User> findByLogin(String login);
+ Optional<User> findByEmailIgnoreCase(String email);
 
  User get(Long id);
 
  @EntityGraph(attributePaths = "authorities")
- public abstract Optional<User> findOneById(Long id);
+ Optional<User> findOneById(Long id);
 
  @EntityGraph(attributePaths = "authorities")
- @Cacheable(cacheNames = "usersByLogin")
- public abstract Optional<User> findOneByLogin(String login);
+ @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
+ Optional<User> findByLogin(String login);
 
  @EntityGraph(attributePaths = "authorities")
- @Cacheable(cacheNames = "usersByEmail")
- public abstract Optional<User> findOneByEmail(String email);
+ @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
+ Optional<User> findByEmail(String email);
 
- public abstract Page<User> findAllByLoginNot(String login, Pageable pageable);
+ Page<User> findAllByLoginNot(String login, Pageable pageable);
 
- public abstract void update(@Id Long id, Instant createdDate);
+ void update(@Id Long id, Instant createdDate);
 
 
 

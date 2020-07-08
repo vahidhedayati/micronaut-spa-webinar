@@ -2,7 +2,7 @@ package com.objectcomputing.util;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
 
-@ConfigurationProperties("jhipster")
+@ConfigurationProperties("spa")
 public class MyApplicationProperties {
 
     private final Cache cache;

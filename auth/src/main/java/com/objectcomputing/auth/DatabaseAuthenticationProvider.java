@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Singleton
@@ -23,45 +24,56 @@ public class DatabaseAuthenticationProvider implements AuthenticationProvider {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseAuthenticationProvider.class);
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BcryptPasswordEncoder passwordEncoder;
 
-    public DatabaseAuthenticationProvider(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DatabaseAuthenticationProvider(UserRepository userRepository, BcryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public Publisher<AuthenticationResponse> authenticate(AuthenticationRequest authenticationRequest) {
+        System.out.println("aa");
         String username = authenticationRequest.getIdentity().toString();
 
         log.debug("Authenticating {}", username);
         if (new EmailValidator().isValid(username, null)) {
-            return Flowable.just(userRepository.findOneByEmail(username)
+            return Flowable.just(userRepository.findByEmail(username)
                     .filter(user -> passwordEncoder.matches(authenticationRequest.getSecret().toString(), user.getPassword()))
                     .map(user -> createMicronautSecurityUser(username, user))
                     .orElse(new NotAuthenticatedResponse("Invalid username or password")));
         }
 
         String lowercaseLogin = username.toLowerCase(Locale.ENGLISH);
-        /*
-        User user1 = userRepository.findOneByLogin(lowercaseLogin).get();
-        if (user1!=null) {
 
-            System.out.println(user1.getPassword()+" | "+authenticationRequest.getSecret().toString()+" | Pass match "+passwordEncoder.matches(authenticationRequest.getSecret().toString(), user1.getPassword()));
-            if (!user1.getActivated()) {
-                System.out.println("is not activated");
-
+        /**
+         * Below is a test block of actual call further down. Comment out other return below and enable this block for
+         * a demonstration on where bottleneck is. There is a period of time before authentication succeeds / fails
+         * it turns out there is some time consued in passwordEncoder.matches
+         *
+        Optional<User> u = userRepository.findByLogin(lowercaseLogin);
+        if (u.isPresent()) {
+            User user1 = u.get();
+            System.out.println("Got user "+user1.getLogin());
+            //paswordEncoder.matches seems to slow down authentication process
+            boolean slowProcessValidation = passwordEncoder.matches(authenticationRequest.getSecret().toString(), user1.getPassword());
+            System.out.println("Password validation "+slowProcessValidation);
+            if (slowProcessValidation) {
+                if (!user1.getActivated()) {
+                    System.out.println("is not activated");
+                }
+                List<String> grantedAuthorities = user1.getAuthorities().stream()
+                        .map(Authority::getName)
+                        .collect(Collectors.toList());
+                return Flowable.just(new CustomUserDetails(user1.getLogin(), grantedAuthorities));
             }
-            List<String> grantedAuthorities = user1.getAuthorities().stream()
-                    .map(Authority::getName)
-                    .collect(Collectors.toList());
-        //    System.out.println("is activated "+user1.getLogin()+" "+grantedAuthorities);
-            return Flowable.just(new CustomUserDetails(user1.getLogin(), grantedAuthorities));
         } else {
             return Flowable.just(new NotAuthenticatedResponse("Invalid username or password"));
         }
-*/
-        return Flowable.just(userRepository.findOneByLogin(lowercaseLogin)
+        */
+
+
+        return Flowable.just(userRepository.findByLogin(lowercaseLogin)
                 .filter(user -> passwordEncoder.matches(authenticationRequest.getSecret().toString(), user.getPassword()))
                 .map(user -> createMicronautSecurityUser(lowercaseLogin, user))
                 .orElse(new NotAuthenticatedResponse("Invalid username or password")));
@@ -74,6 +86,7 @@ public class DatabaseAuthenticationProvider implements AuthenticationProvider {
         List<String> grantedAuthorities = user.getAuthorities().stream()
                 .map(Authority::getName)
                 .collect(Collectors.toList());
+
         return new CustomUserDetails(user.getLogin(), grantedAuthorities);
     }
 }

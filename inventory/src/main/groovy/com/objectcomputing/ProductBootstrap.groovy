@@ -18,7 +18,7 @@ class ProductBootstrap {
     @EventListener
     void init(ServerStartupEvent event) {
 
-        ["ACME", "Makers"].each {tenant ->
+        ["acme", "makers"].each {tenant ->
             withId(tenant) {
                 productService.save(new Product(name: "${tenant} Widget A"))
                 productService.save(new Product(name: "${tenant} Widget B"))

@@ -10,8 +10,8 @@
             <label for="tenant">Select Tenant:</label>
             <select id="tenant" v-model="tenant">
                 <option value="">Select...</option>
-                <option value="ACME">ACME</option>
-                <option value="Makers">Makers</option>
+                <option value="acme">acme</option>
+                <option value="makers">makers</option>
             </select>
         </form>
 
@@ -44,7 +44,7 @@
                 isLoading: false,
             }
         },
-        props: ["username"],
+        props: ["username", "roles"],
         components: {
             Loading
         },
@@ -86,7 +86,7 @@
         },
         computed: {
             isAdmin() {
-                return (this.username === 'Admin');
+                return (this.roles.includes('ROLE_ADMIN'));
             }
         }
 

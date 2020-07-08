@@ -25,9 +25,9 @@ public class CacheConfiguration {
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
-    public CacheConfiguration(MyApplicationProperties jHipsterProperties) {
+    public CacheConfiguration(MyApplicationProperties myApplicationProperties) {
         MyApplicationProperties.Cache.Ehcache ehcache =
-            jHipsterProperties.getCache().getEhcache();
+                myApplicationProperties.getCache().getEhcache();
 
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
@@ -52,13 +52,6 @@ public class CacheConfiguration {
         createCache(cm, User.class.getName());
         createCache(cm, Authority.class.getName());
         createCache(cm,User.class.getName() + ".authorities");
-        //createCache(cm,BankAccount.class.getName());
-        //createCache(cm,Label.class.getName());
-        //createCache(cm,Operation.class.getName());
-        //createCache(cm,BankAccount.class.getName() + ".operations");
-        //createCache(cm,Label.class.getName() + ".operations");
-        //createCache(cm,Operation.class.getName() + ".labels");
-        // jhipster-needle-ehcache-add-entry
     }
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {
