@@ -32,3 +32,22 @@ consul:
       enabled: true
     defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
 ---
+datasources:
+  default:
+    url: ${JDBC.url}
+    username: ${JDBC.username}
+    password: ${JDBC.password}
+    driverClassName: ${JDBC.driver:com.mysql.cj.jdbc.Driver}
+    maximumPoolSize: 15
+    minimumIdle: 1
+jpa:
+  default:
+    entity-scan:
+      packages:
+        - 'com.objectcomputing.domain'
+        - 'foo.baz'
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true
