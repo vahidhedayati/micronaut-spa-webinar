@@ -1,5 +1,7 @@
 include "auth"
+include "auth-api"
 include "gateway"
 include "inventory"
 include "inventory-api"
 include "frontend"
+include "frontend-vue4"

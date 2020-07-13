@@ -1,0 +1,20 @@
+group "com.objectcomputing"
+
+apply plugin:"java"
+
+repositories {
+    mavenCentral()
+    maven { url "https://jcenter.bintray.com" }
+}
+
+dependencies {
+    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut.data:micronaut-data-hibernate-jpa"
+    runtime "io.micronaut.configuration:micronaut-jdbc-hikari"
+    //runtime 'mysql:mysql-connector-java:8.0.20'
+    compile 'org.apache.commons:commons-lang3:3.10'
+}

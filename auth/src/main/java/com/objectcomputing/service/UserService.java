@@ -14,6 +14,8 @@ import com.objectcomputing.repository.UserRepository;
 import com.objectcomputing.service.dto.UserDTO;
 import com.objectcomputing.service.util.RandomUtil;
 import io.micronaut.cache.CacheManager;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.scheduling.annotation.Scheduled;
 import io.micronaut.security.authentication.providers.PasswordEncoder;
 import io.micronaut.transaction.annotation.ReadOnly;
@@ -246,11 +248,11 @@ public class UserService {
             });
     }
 
-   // @ReadOnly
-  //  public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-  //      Page<User> userPage = userRepository.findAllByLoginNot(Constants.ANONYMOUS_USER, pageable);
-    //    return Page.of(userPage.getContent().stream().map(UserDTO::new).collect(Collectors.toList()), pageable, userPage.getTotalSize());
-   // }
+    @ReadOnly
+    public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
+        Page<User> userPage = userRepository.findAllByLoginNot(Constants.ANONYMOUS_USER, pageable);
+        return Page.of(userPage.getContent().stream().map(UserDTO::new).collect(Collectors.toList()), pageable, userPage.getTotalSize());
+   }
 
     @ReadOnly
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {

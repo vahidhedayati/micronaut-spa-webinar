@@ -12,7 +12,7 @@
 
         <br />
 
-        <input type="submit" value="Login" />
+        <input type="submit" v-show="awaitSubmit" value="Login" />
     </form>
 </template>
 <script>
@@ -20,6 +20,7 @@
         name: 'LoginForm',
         data() {
             return {
+                awaitSubmit:true,
                 username: '',
                 password: '',
                 message: null
@@ -29,7 +30,7 @@
             login(e) {
                 e.preventDefault();
                 this.message = null;
-
+                this.awaitSubmit=false
                 fetch('http://localhost:8080/login', {
                     method: "POST",
                     headers: new Headers({
@@ -43,10 +44,13 @@
                             return response.json();
                         } else {
                             this.message = "Invalid credentials"
+                            this.awaitSubmit=true
                         }
                     })
                     .then(json => this.$emit('login', json))
-                    .catch(error => this.message = error.message);
+                    .catch(error =>  { this.message = error.message
+                                        this.awaitSubmit=true});
+
             }
         }
     }

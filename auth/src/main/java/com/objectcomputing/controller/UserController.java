@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing users.
@@ -53,7 +54,7 @@ import java.util.*;
  * <p>
  * Another option would be to have a specific JPA entity graph to handle this case.
  */
-@Controller("/api")
+@Controller("/user")
 public class UserController {
 
     private final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -72,6 +73,31 @@ public class UserController {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
+    }
+
+
+    @Get("/allusers")
+    @Secured(AuthoritiesConstants.ADMIN)
+    public HttpResponse getUsers() {
+        return HttpResponse.ok(
+                userRepository.findAll()
+        );
+    }
+
+    @Get("/user/{id}")
+    //@Secured(AuthoritiesConstants.ADMIN)
+    public HttpResponse getUser(Long id) {
+        return HttpResponse.ok(
+                userRepository.findById(id)
+        );
+    }
+
+    @Post("/saveuser")
+    @Secured(AuthoritiesConstants.ADMIN)
+    public HttpResponse saveUser(User user) {
+        return HttpResponse.created(
+                userRepository.save(user)
+        );
     }
 
     /**
@@ -145,13 +171,13 @@ public class UserController {
      * @param pageable the pagination information.
      * @return the {@link HttpResponse} with status {@code 200 (OK)} and with body all users.
      */
-   // @Get("/users")
-   // public HttpResponse<List<UserDTO>> getAllUsers(HttpRequest request, Pageable pageable) {
-        //final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
-      ///  return HttpResponse.ok(page.getContent()).headers(headers ->
-      ///      PaginationUtil.generatePaginationHttpHeaders(headers, UriBuilder.of(request.getPath()), page)
-       // );
-  //  }
+    @Get("/users")
+    public HttpResponse<List<UserDTO>> getAllUsers(HttpRequest request, Pageable pageable) {
+        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+        return HttpResponse.ok(page.getContent()).headers(headers ->
+            PaginationUtil.generatePaginationHttpHeaders(headers, UriBuilder.of(request.getPath()), page)
+       );
+    }
 
     /**
      * Gets a list of all roles.

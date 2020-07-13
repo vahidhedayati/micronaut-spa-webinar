@@ -34,10 +34,12 @@ dependencies {
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "io.micronaut:micronaut-http-client"
     implementation "io.micronaut:micronaut-discovery-client"
+
+    implementation project(":auth-api")
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     compile 'org.mindrot:jbcrypt:0.4'
     //compile 'commons-io:commons-io:2.7'
-    compile 'org.apache.commons:commons-lang3:3.10'
+    //compile 'org.apache.commons:commons-lang3:3.10'
     //compile 'net.sf.ehcache:ehcache:2.10.6'
     compile 'javax.cache:cache-api:1.1.1'
 
@@ -45,6 +47,7 @@ dependencies {
     compile 'org.zalando:problem-violations:0.25.2'
     compile 'org.thymeleaf:thymeleaf:3.0.11.RELEASE'
     compile 'com.sun.mail:javax.mail:1.6.2'
+
 
 
     implementation "io.micronaut.data:micronaut-data-hibernate-jpa"
