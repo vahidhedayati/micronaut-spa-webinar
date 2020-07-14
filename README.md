@@ -49,9 +49,10 @@ This commented out segment breaks down the optional process in which highlighted
 #### Vue 3 demo site 
 Been watching videos on the latest (vue 3) and decided to write a front end using Vue 3 - it is similar to exising vue 2 front-end. 
 To use vue 3 front-end :
+
 `./gradlew frontend-vue3:serve`
-  
-This will launch vue4, or go into `frontend-vue3` folder and run `npm run serve` and site will appear on `http://localhost:8081/` 
+
+alternatively  go into `frontend-vue3` folder and run `npm run serve` and site will appear on `http://localhost:8081/` 
 
 
  
