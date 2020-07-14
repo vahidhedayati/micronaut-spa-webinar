@@ -40,19 +40,18 @@ Start ALL applications in one go.
 ---
 
 
-###Authentication notes:
+#### Authentication notes:
 
 There is a slight delay in authenticating. Please refer to [DatabaseAuthenticationProvider.java](https://github.com/vahidhedayati/micronaut-spa-webinar/blob/master/auth/src/main/java/com/objectcomputing/auth/DatabaseAuthenticationProvider.java#L59). 
 This commented out segment breaks down the optional process in which highlighted segment `passwordEncoder.matches` causes this.  
 
 
-##Vue 4 demo site 
-Been watching videos on vue 4 and decided to write a front end using Vue 4 - it is similar to above vuejs 3 project. 
-To use vue 4 as a frontend  - the initial login attempt fails with 404, second attempt works. Everything works near enough the same as vue 2 site  
-
-`./gradlew frontend-vue4:serve`
+#### Vue 3 demo site 
+Been watching videos on the latest (vue 3) and decided to write a front end using Vue 3 - it is similar to exising vue 2 front-end. 
+To use vue 3 front-end :
+`./gradlew frontend-vue3:serve`
   
-This will launch vue4, or go into `frontend-vue4` folder and run `npm run serve` and site will appear on `http://localhost:8081/` 
+This will launch vue4, or go into `frontend-vue3` folder and run `npm run serve` and site will appear on `http://localhost:8081/` 
 
 
  
